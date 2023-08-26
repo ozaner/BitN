@@ -1,0 +1,19 @@
+# Visual Studio cache/config directory
+.vs/
+
+# Build results
+debug/
+debugPublic/
+release/
+releases/
+x64/
+x86/
+win32/
+arm/
+arm64/
+bld/
+bin/
+obj/
+out/
+log/
+logs/
