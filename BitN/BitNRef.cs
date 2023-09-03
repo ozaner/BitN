@@ -236,19 +236,47 @@ internal readonly struct BitNRef :
     public bool TryWriteLittleEndian(Span<byte> destination, out int bytesWritten)
         => IBitN<BitNRef, byte>.TryWriteLittleEndianHelper(m_value, destination, out bytesWritten);
     public static bool TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out BitNRef value)
-        => IBitN<BitNRef, byte>.TryReadBigEndianHelper(source, isUnsigned, out value);
+    {
+        var success = IBitN<BitNRef, byte>.TryReadBigEndianHelper(source, isUnsigned, out byte backingValue);
+        value = (BitNRef)backingValue;
+        return success;
+    }
+
     public static bool TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out BitNRef value)
-        => IBitN<BitNRef, byte>.TryReadLittleEndianHelper(source, isUnsigned, out value);
+    {
+        var success = IBitN<BitNRef, byte>.TryReadLittleEndianHelper(source, isUnsigned, out byte backingValue);
+        value = (BitNRef)backingValue;
+        return success;
+    }
 
     //-------------------------------
     // TryConvert
     //-------------------------------
     static bool INumberBase<BitNRef>.TryConvertFromChecked<TOther>(TOther value, out BitNRef result)
-        => IBitN<BitNRef, byte>.TryConvertFromCheckedHelper(value, out result);
+    {
+        var success = IBitN<BitNRef, byte>.TryConvertFromCheckedHelper(value, out byte backingResult); //will fail if cant convert to backing
+        result = checked((BitNRef)backingResult); //will fail if backing cant convert to BitN
+        return success;
+    }
+
     static bool INumberBase<BitNRef>.TryConvertFromSaturating<TOther>(TOther value, out BitNRef result)
-        => IBitN<BitNRef, byte>.TryConvertFromSaturatingHelper(value, out result);
+    {
+        var success = IBitN<BitNRef, byte>.TryConvertFromSaturatingHelper(value, out byte backingResult); //will fail if cant convert to backing
+        
+        if (backingResult >= MaxValue) result = MaxValue;
+        else if (backingResult < MinValue) result = MinValue;
+        else result = (BitNRef)backingResult;
+        
+        return success;
+    }
+
     static bool INumberBase<BitNRef>.TryConvertFromTruncating<TOther>(TOther value, out BitNRef result)
-        => IBitN<BitNRef, byte>.TryConvertFromTruncatingHelper(value, out result);
+    {
+        var success = IBitN<BitNRef, byte>.TryConvertFromTruncatingHelper(value, out byte backingResult); //will fail if cant convert to backing
+        result = (BitNRef)backingResult;
+        return success;
+    }
+
     static bool INumberBase<BitNRef>.TryConvertToChecked<TOther>(BitNRef value, [MaybeNullWhen(false)] out TOther result)
         => IBitN<BitNRef, byte>.TryConvertToCheckedHelper(value.m_value, out result);
     static bool INumberBase<BitNRef>.TryConvertToSaturating<TOther>(BitNRef value, [MaybeNullWhen(false)] out TOther result)
