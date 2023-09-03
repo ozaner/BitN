@@ -209,12 +209,13 @@ internal readonly struct BitNRef :
     // IEquatable/IComparable
     //-------------------------------
     public bool Equals(BitNRef other) => this == other;
-    public int CompareTo(BitNRef other) => this - other;
+    public int CompareTo(BitNRef other)
+        => this - other; //Only works for types that can fit inside an int (i.e. byte, ushort)//$1or2byte
+//      => this < other ? -1 : (this > other ? 1 : 0);
     public int CompareTo(object? obj) => obj switch
     {
         null => 1, //null comes after everything (ordinally equiv. to ꞷ)
-        BitNRef b => this - b, //Only works for types that can fit inside an int (i.e. byte, ushort)
-//      BitNRef b => this < b ? -1 : (this > b ? 1 : 0), 
+        BitNRef b => CompareTo(b), //forward more specific overload
         _ => throw new ArgumentException($"{nameof(obj)} must be a {nameof(BitNRef)}")
     };
 
