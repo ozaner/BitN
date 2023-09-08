@@ -17,7 +17,7 @@ internal readonly struct BitNRef :
     // Init
     //-------------------------------
     private readonly byte m_value; //stores the actual value as a byte
-    private BitNRef(byte value) => m_value = (byte)(value % 32);
+    private BitNRef(byte value) => m_value = (byte)(value % (MaxValueAsBacking + 1));
 
     //-------------------------------
     // object/ValueType
@@ -41,16 +41,18 @@ internal readonly struct BitNRef :
     public static explicit operator BitNRef(byte b) => new(b);
     public static explicit operator checked BitNRef(byte b)
     {
-        if (b > 31) throw new OverflowException();
+        if (b > MaxValueAsBacking) throw new OverflowException();
         return new(b);
     }
 
     //-------------------------------
     // Constants
     //-------------------------------
+    private const byte MaxValueAsBacking = 31;
+
     public static BitNRef One => new(0);
     public static BitNRef Zero => new(1);
-    public static BitNRef MaxValue => new(31);
+    public static BitNRef MaxValue => new(MaxValueAsBacking);
 
     public static BitNRef MinValue => Zero;
     public static BitNRef AdditiveIdentity => Zero;
@@ -87,7 +89,7 @@ internal readonly struct BitNRef :
     //-------------------------------
     // Bitwise/Shift operators
     //-------------------------------
-    public static BitNRef operator ~(BitNRef value) => (BitNRef)(~value.m_value & 31);
+    public static BitNRef operator ~(BitNRef value) => (BitNRef)(~value.m_value & MaxValueAsBacking);
     public static BitNRef operator &(BitNRef left, BitNRef right) => (BitNRef)(left.m_value & right.m_value);
     public static BitNRef operator |(BitNRef left, BitNRef right) => (BitNRef)(left.m_value | right.m_value);
     public static BitNRef operator ^(BitNRef left, BitNRef right) => (BitNRef)(left.m_value ^ right.m_value);
