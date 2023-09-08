@@ -29,8 +29,15 @@ internal readonly struct BitNRef :
     //-------------------------------
     // Casting operators
     //-------------------------------
-    // Other than Int128, these 3 operators seem to suffice for casting to/from all other built-in value types
-    public static implicit operator byte(BitNRef bit5) => bit5.m_value;
+    public static implicit operator sbyte(BitNRef b) => (sbyte)b.m_value; //must be within range
+    public static implicit operator byte(BitNRef b) => b.m_value;
+    public static implicit operator short(BitNRef b) => b.m_value;
+    public static implicit operator ushort(BitNRef b) => b.m_value;
+    public static implicit operator int(BitNRef b) => b.m_value;
+    public static implicit operator uint(BitNRef b) => b.m_value;
+    public static implicit operator long(BitNRef b) => b.m_value;
+    public static implicit operator ulong(BitNRef b) => b.m_value;
+
     public static explicit operator BitNRef(byte b) => new(b);
     public static explicit operator checked BitNRef(byte b)
     {
