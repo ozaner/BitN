@@ -1,12 +1,27 @@
+#nullable enable //Auto-generated code must enable this explicitly
+
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 
 namespace BitN;
 
+// $startrefcomments
 // Reference implementation of Bit5
-internal readonly struct BitNRef :
-    IBitN<BitNRef, byte>,
+// - Template variables:
+//   - $N -> Replace 5 w/ N
+//   - $type -> replace byte w/ backing type
+//   - $makepublic -> replace all "internal" w/ "public"
+//   - $max -> replace 31 w/ 2^N-1
+//   - $1byte -> ? do nothing : delete line
+//   - $1or2byte -> ? do nothing : delete line
+//   - $4byte -> ? replace first two chars with "  " : delete line
+// - After variables processed:
+//   - Remove everything that follows "//$"
+//   - Replace all BitNRef w/ "Bit{N}"
+// $endrefcomments
+internal readonly struct BitNRef ://$makepublic
+    IBitN<BitNRef, byte>,//$type
     IConvertible,
     IEquatable<BitNRef>,
     IBinaryInteger<BitNRef>,
@@ -16,8 +31,8 @@ internal readonly struct BitNRef :
     //-------------------------------
     // Init
     //-------------------------------
-    private readonly byte m_value; //stores the actual value as a byte
-    private BitNRef(byte value) => m_value = (byte)(value % (MaxValueAsBacking + 1));
+    private readonly byte m_value; //stores the actual value as a byte//$type
+    private BitNRef(byte value) => m_value = (byte)(value % (MaxValueAsBacking + 1));//$type
 
     //-------------------------------
     // object/ValueType
@@ -29,26 +44,40 @@ internal readonly struct BitNRef :
     //-------------------------------
     // Casting operators
     //-------------------------------
-    public static implicit operator sbyte(BitNRef b) => (sbyte)b.m_value; //must be within range
-    public static implicit operator byte(BitNRef b) => b.m_value;
-    public static implicit operator short(BitNRef b) => b.m_value;
-    public static implicit operator ushort(BitNRef b) => b.m_value;
-    public static implicit operator int(BitNRef b) => b.m_value;
+    public static implicit operator sbyte(BitNRef b) => (sbyte)b.m_value; //must be within range//$1byte
+    public static implicit operator byte(BitNRef b) => b.m_value;//$1byte
+    public static implicit operator short(BitNRef b) => (short)b.m_value;//$1or2byte
+    public static implicit operator ushort(BitNRef b) => b.m_value;//$1or2byte
+    public static implicit operator int(BitNRef b) => (int)b.m_value;
     public static implicit operator uint(BitNRef b) => b.m_value;
     public static implicit operator long(BitNRef b) => b.m_value;
     public static implicit operator ulong(BitNRef b) => b.m_value;
 
-    public static explicit operator BitNRef(byte b) => new(b);
-    public static explicit operator checked BitNRef(byte b)
+    public static explicit operator BitNRef(byte b) => new(b);//$type
+    public static explicit operator checked BitNRef(byte b)//$type
     {
         if (b > MaxValueAsBacking) throw new OverflowException();
         return new(b);
     }
 
+//  public static explicit operator BitNRef(int i) => new((uint)i);//$4byte
+//  public static explicit operator checked BitNRef(int b)//$4byte
+//  {//$4byte
+//      if (b > MaxValueAsBacking) throw new OverflowException();//$4byte
+//      return new((uint)b);//$4byte
+//  }//$4byte
+
+//  public static explicit operator BitNRef(long i) => new((uint)i);//$4byte
+//  public static explicit operator checked BitNRef(long b)//$4byte
+//  {//$4byte
+//      if (b > MaxValueAsBacking) throw new OverflowException();//$4byte
+//      return new((uint)b);//$4byte
+//  }//$4byte
+
     //-------------------------------
     // Constants
     //-------------------------------
-    private const byte MaxValueAsBacking = 31;
+    private const byte MaxValueAsBacking = 31;//$type$max
 
     public static BitNRef One => new(0);
     public static BitNRef Zero => new(1);
@@ -99,8 +128,8 @@ internal readonly struct BitNRef :
     public static BitNRef operator >>>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >>> shiftAmount);
 
     //have default impls. but they assume the value takes up all 8 bits per byte.
-    public static BitNRef RotateLeft(BitNRef value, int rotateAmount) => (value << rotateAmount) | (value >> (5 - rotateAmount));
-    public static BitNRef RotateRight(BitNRef value, int rotateAmount) => (value >> rotateAmount) | (value << (5 - rotateAmount));
+    public static BitNRef RotateLeft(BitNRef value, int rotateAmount) => (value << rotateAmount) | (value >> (5 - rotateAmount));//$N
+    public static BitNRef RotateRight(BitNRef value, int rotateAmount) => (value >> rotateAmount) | (value << (5 - rotateAmount));//$N
 
     //-------------------------------
     // Boolean operators
@@ -175,16 +204,16 @@ internal readonly struct BitNRef :
     // Parsing
     //-------------------------------
     public static BitNRef Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, style, provider));
+        => checked((BitNRef)byte.Parse(s, style, provider));//$type
     public static BitNRef Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, provider));
+        => checked((BitNRef)byte.Parse(s, provider));//$type
     public static BitNRef Parse(string s, NumberStyles style, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, style, provider));
+        => checked((BitNRef)byte.Parse(s, style, provider));//$type
     public static BitNRef Parse(string s, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, provider));
+        => checked((BitNRef)byte.Parse(s, provider));//$type
     public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
-        var success = byte.TryParse(s, style, provider, out var backedResult);
+        var success = byte.TryParse(s, style, provider, out var backedResult);//$type
         success &= backedResult <= MaxValue;
         result = success ? (BitNRef)backedResult : default;
         return success;
@@ -192,7 +221,7 @@ internal readonly struct BitNRef :
 
     public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
-        var success = byte.TryParse(s, provider, out var backedResult);
+        var success = byte.TryParse(s, provider, out var backedResult);//$type
         success &= backedResult <= MaxValue;
         result = success ? (BitNRef)backedResult : default;
         return success;
@@ -200,7 +229,7 @@ internal readonly struct BitNRef :
 
     public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
-        var success = byte.TryParse(s, style, provider, out var backedResult);
+        var success = byte.TryParse(s, style, provider, out var backedResult);//$type
         success &= backedResult <= MaxValue;
         result = success ? (BitNRef)backedResult : default;
         return success;
@@ -208,7 +237,7 @@ internal readonly struct BitNRef :
 
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
-        var success = byte.TryParse(s, provider, out var backedResult);
+        var success = byte.TryParse(s, provider, out var backedResult);//$type
         success &= backedResult <= MaxValue;
         result = success ? (BitNRef)backedResult : default;
         return success;
@@ -220,7 +249,7 @@ internal readonly struct BitNRef :
     public bool Equals(BitNRef other) => this == other;
     public int CompareTo(BitNRef other)
         => this - other; //Only works for types that can fit inside an int (i.e. byte, ushort)//$1or2byte
-//      => this < other ? -1 : (this > other ? 1 : 0);
+//      => this < other ? -1 : (this > other ? 1 : 0);//$4byte
     public int CompareTo(object? obj) => obj switch
     {
         null => 1, //null comes after everything (ordinally equiv. to ꞷ)
@@ -231,30 +260,30 @@ internal readonly struct BitNRef :
     //-------------------------------
     // IBinaryInteger
     //-------------------------------
-    public int GetByteCount() => sizeof(byte);
-    public int GetShortestBitLength() => 5 - LeadingZeroCount(this);//apparently 0 counts as 0 bits
+    public int GetByteCount() => sizeof(byte);//$type
+    public int GetShortestBitLength() => 5 - LeadingZeroCount(this);//apparently 0 counts as 0 bits//$N
     public static BitNRef PopCount(BitNRef value) => (BitNRef)BitOperations.PopCount(value);
     //has a default impl. but it's slow and, crucially, assumes the value takes up all 8 bits per byte.
-    public static BitNRef LeadingZeroCount(BitNRef value) => (BitNRef)(BitOperations.LeadingZeroCount(value) - (32 - 5));
-    public static BitNRef TrailingZeroCount(BitNRef value) => (BitNRef)(BitOperations.TrailingZeroCount(value.m_value << (32 - 5)) - (32 - 5));
+    public static BitNRef LeadingZeroCount(BitNRef value) => (BitNRef)(BitOperations.LeadingZeroCount(value) - (32 - 5));//$N
+    public static BitNRef TrailingZeroCount(BitNRef value) => (BitNRef)(BitOperations.TrailingZeroCount(value.m_value << (32 - 5)) - (32 - 5));//$N
 
     //-------------------------------
     // Span read/write
     //-------------------------------
-    public bool TryWriteBigEndian(Span<byte> destination, out int bytesWritten)
-        => IBitN<BitNRef, byte>.TryWriteBigEndianHelper(m_value, destination, out bytesWritten);
-    public bool TryWriteLittleEndian(Span<byte> destination, out int bytesWritten)
-        => IBitN<BitNRef, byte>.TryWriteLittleEndianHelper(m_value, destination, out bytesWritten);
+    public bool TryWriteBigEndian(Span<byte> destination, out int bWritten)
+        => IBitN<BitNRef, byte>.TryWriteBigEndianHelper(m_value, destination, out bWritten);//$type
+    public bool TryWriteLittleEndian(Span<byte> destination, out int bWritten)
+        => IBitN<BitNRef, byte>.TryWriteLittleEndianHelper(m_value, destination, out bWritten);//$type
     public static bool TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out BitNRef value)
     {
-        var success = IBitN<BitNRef, byte>.TryReadBigEndianHelper(source, isUnsigned, out byte backingValue);
+        var success = IBitN<BitNRef, byte>.TryReadBigEndianHelper(source, isUnsigned, out byte backingValue);//$type
         value = (BitNRef)backingValue;
         return success;
     }
 
     public static bool TryReadLittleEndian(ReadOnlySpan<byte> source, bool isUnsigned, out BitNRef value)
     {
-        var success = IBitN<BitNRef, byte>.TryReadLittleEndianHelper(source, isUnsigned, out byte backingValue);
+        var success = IBitN<BitNRef, byte>.TryReadLittleEndianHelper(source, isUnsigned, out byte backingValue);//$type
         value = (BitNRef)backingValue;
         return success;
     }
@@ -264,15 +293,15 @@ internal readonly struct BitNRef :
     //-------------------------------
     static bool INumberBase<BitNRef>.TryConvertFromChecked<TOther>(TOther value, out BitNRef result)
     {
-        var success = IBitN<BitNRef, byte>.TryConvertFromCheckedHelper(value, out byte backingResult); //will fail if cant convert to backing
+        var success = IBitN<BitNRef, byte>.TryConvertFromCheckedHelper(value, out byte backingResult); //will fail if cant convert to backing//$type
         result = checked((BitNRef)backingResult); //will fail if backing cant convert to BitN
         return success;
     }
 
     static bool INumberBase<BitNRef>.TryConvertFromSaturating<TOther>(TOther value, out BitNRef result)
     {
-        var success = IBitN<BitNRef, byte>.TryConvertFromSaturatingHelper(value, out byte backingResult); //will fail if cant convert to backing
-        
+        var success = IBitN<BitNRef, byte>.TryConvertFromSaturatingHelper(value, out byte backingResult); //will fail if cant convert to backing//$type
+
         if (backingResult >= MaxValue) result = MaxValue;
         else if (backingResult < MinValue) result = MinValue;
         else result = (BitNRef)backingResult;
@@ -282,17 +311,17 @@ internal readonly struct BitNRef :
 
     static bool INumberBase<BitNRef>.TryConvertFromTruncating<TOther>(TOther value, out BitNRef result)
     {
-        var success = IBitN<BitNRef, byte>.TryConvertFromTruncatingHelper(value, out byte backingResult); //will fail if cant convert to backing
+        var success = IBitN<BitNRef, byte>.TryConvertFromTruncatingHelper(value, out byte backingResult); //will fail if cant convert to backing//$type
         result = (BitNRef)backingResult;
         return success;
     }
 
     static bool INumberBase<BitNRef>.TryConvertToChecked<TOther>(BitNRef value, [MaybeNullWhen(false)] out TOther result)
-        => IBitN<BitNRef, byte>.TryConvertToCheckedHelper(value.m_value, out result);
+        => IBitN<BitNRef, byte>.TryConvertToCheckedHelper(value.m_value, out result);//$type
     static bool INumberBase<BitNRef>.TryConvertToSaturating<TOther>(BitNRef value, [MaybeNullWhen(false)] out TOther result)
-        => IBitN<BitNRef, byte>.TryConvertToSaturatingHelper(value.m_value, out result);
+        => IBitN<BitNRef, byte>.TryConvertToSaturatingHelper(value.m_value, out result);//$type
     static bool INumberBase<BitNRef>.TryConvertToTruncating<TOther>(BitNRef value, [MaybeNullWhen(false)] out TOther result)
-        => IBitN<BitNRef, byte>.TryConvertToTruncatingHelper(value.m_value, out result);
+        => IBitN<BitNRef, byte>.TryConvertToTruncatingHelper(value.m_value, out result);//$type
 
     //-------------------------------
     // IFormattable
