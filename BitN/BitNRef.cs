@@ -63,9 +63,9 @@ internal readonly struct BitNRef :
     //-------------------------------
     // Unary arithmetic operators
     //-------------------------------
-    public static BitNRef operator +(BitNRef value) => (BitNRef)(+value.m_value);
-    public static BitNRef operator -(BitNRef value) => (BitNRef)(-value.m_value);
-    public static BitNRef operator checked -(BitNRef value) => checked((BitNRef)(-value.m_value));
+    public static BitNRef operator +(BitNRef value) => value;
+    public static BitNRef operator -(BitNRef value) => (BitNRef)(0 - value.m_value);
+    public static BitNRef operator checked -(BitNRef value) => throw new OverflowException();
 
     public static BitNRef operator ++(BitNRef value) => (BitNRef)(value.m_value + 1);
     public static BitNRef operator checked ++(BitNRef value) => checked((BitNRef)(value.m_value + 1));
