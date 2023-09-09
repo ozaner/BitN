@@ -54,25 +54,19 @@ internal readonly struct BitNRef ://$makepublic
     public static implicit operator ulong(BitNRef b) => b.m_value;
 
     public static explicit operator BitNRef(byte b) => new(b);//$type
-    public static explicit operator checked BitNRef(byte b)//$type
-    {
-        if (b > MaxValueAsBacking) throw new OverflowException();
-        return new(b);
-    }
-
+    public static explicit operator checked BitNRef(byte b) => CheckedCast(b);//$type
+//  public static explicit operator BitNRef(ushort b) => new((uint)b);//$4byte
+//  public static explicit operator checked BitNRef(ushort b) => CheckedCast(b);//$4byte
 //  public static explicit operator BitNRef(int i) => new((uint)i);//$4byte
-//  public static explicit operator checked BitNRef(int b)//$4byte
-//  {//$4byte
-//      if (b > MaxValueAsBacking) throw new OverflowException();//$4byte
-//      return new((uint)b);//$4byte
-//  }//$4byte
+//  public static explicit operator checked BitNRef(int i) => CheckedCast(i);//$4byte
+//  public static explicit operator BitNRef(long l) => new((uint)l);//$4byte
+//  public static explicit operator checked BitNRef(long l) => CheckedCast(l);//$4byte
 
-//  public static explicit operator BitNRef(long i) => new((uint)i);//$4byte
-//  public static explicit operator checked BitNRef(long b)//$4byte
-//  {//$4byte
-//      if (b > MaxValueAsBacking) throw new OverflowException();//$4byte
-//      return new((uint)b);//$4byte
-//  }//$4byte
+    private static BitNRef CheckedCast(long l)
+    {
+        if (l > MaxValueAsBacking) throw new OverflowException();
+        return new((byte)l);
+    }
 
     //-------------------------------
     // Constants
