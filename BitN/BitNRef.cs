@@ -75,16 +75,22 @@ internal readonly struct BitNRef ://$makepublic
     // Constants
     //-------------------------------
     private const byte MaxValueAsBacking = 31;//$type$max
+    private static readonly BitNRef One = new(1);
+    private static readonly BitNRef Zero = new(0);
 
-    public static BitNRef One => new(0);
-    public static BitNRef Zero => new(1);
-    public static BitNRef MaxValue => new(MaxValueAsBacking);
+    public static readonly BitNRef MaxValue = new(MaxValueAsBacking);
+    public static readonly BitNRef MinValue = Zero;
 
-    public static BitNRef MinValue => Zero;
-    public static BitNRef AdditiveIdentity => Zero;
-    public static BitNRef MultiplicativeIdentity => One;
-
-    public static int Radix => 2;
+    //-------------------------------
+    // Interface constants
+    //-------------------------------
+    static int INumberBase<BitNRef>.Radix => 2;
+    static BitNRef INumberBase<BitNRef>.One => One;
+    static BitNRef INumberBase<BitNRef>.Zero => Zero;
+    static BitNRef IMinMaxValue<BitNRef>.MaxValue => MaxValue;
+    static BitNRef IMinMaxValue<BitNRef>.MinValue => MaxValue;
+    static BitNRef IAdditiveIdentity<BitNRef, BitNRef>.AdditiveIdentity => Zero;
+    static BitNRef IMultiplicativeIdentity<BitNRef, BitNRef>.MultiplicativeIdentity => One;
 
     //-------------------------------
     // Unary arithmetic operators
