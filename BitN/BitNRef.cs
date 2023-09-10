@@ -15,6 +15,7 @@ namespace BitN;
 //   - $max -> replace 31 w/ 2^N-1
 //   - $1byte -> ? do nothing : delete line
 //   - $1or2byte -> ? do nothing : delete line
+//   - $2byte -> ? replace first two chars with "  " : delete line
 //   - $4byte -> ? replace first two chars with "  " : delete line
 //   - $addbitncasts -> insert the BitN specific cast operators
 // - After variables processed:
@@ -54,10 +55,10 @@ internal readonly struct BitNRef ://$makepublic
     public static implicit operator long(BitNRef b) => b.m_value;
     public static implicit operator ulong(BitNRef b) => b.m_value;
 
+//  public static implicit operator BitNRef(byte b) => new(b);//$2byte
+//  public static implicit operator BitNRef(ushort b) => new(b);//$4byte
     public static explicit operator BitNRef(byte b) => new(b);//$type
     public static explicit operator checked BitNRef(byte b) => CheckedCast(b);//$type
-//  public static explicit operator BitNRef(ushort b) => new((uint)b);//$4byte
-//  public static explicit operator checked BitNRef(ushort b) => CheckedCast(b);//$4byte
 //  public static explicit operator BitNRef(int i) => new((uint)i);//$4byte
 //  public static explicit operator checked BitNRef(int i) => CheckedCast(i);//$4byte
 //  public static explicit operator BitNRef(long l) => new((uint)l);//$4byte

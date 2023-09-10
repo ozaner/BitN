@@ -68,6 +68,13 @@ public class BitNGenerator : IIncrementalGenerator
             if (line.Contains("$1byte") && byteSize != 1) continue;
             //$1or2byte -> ? do nothing : delete line
             if (line.Contains("$1or2byte") && byteSize > 2) continue;
+            //$2byte -> ? replace first two chars with "  " : delete line
+            if (line.Contains("$2byte"))
+            {
+                if (byteSize == 2)
+                    newLine = "  " + newLine.Substring(2);
+                else continue;
+            }
             //$4byte -> ? replace first two chars with "  " : delete line
             if (line.Contains("$4byte"))
             {
