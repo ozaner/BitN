@@ -16,6 +16,7 @@ namespace BitN;
 //   - $1byte -> ? do nothing : delete line
 //   - $1or2byte -> ? do nothing : delete line
 //   - $4byte -> ? replace first two chars with "  " : delete line
+//   - $addbitncasts -> insert the BitN specific cast operators
 // - After variables processed:
 //   - Remove everything that follows "//$"
 //   - Replace all BitNRef w/ "Bit{N}"
@@ -62,6 +63,7 @@ internal readonly struct BitNRef ://$makepublic
 //  public static explicit operator BitNRef(long l) => new((uint)l);//$4byte
 //  public static explicit operator checked BitNRef(long l) => CheckedCast(l);//$4byte
 
+    //$addbitncasts
     private static BitNRef CheckedCast(long l)
     {
         if (l > MaxValueAsBacking) throw new OverflowException();

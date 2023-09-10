@@ -75,6 +75,16 @@ public class BitNGenerator : IIncrementalGenerator
                     newLine = "  " + newLine.Substring(2);
                 else continue;
             }
+            //$addbitncasts -> insert the BitN specific cast operators
+            if (line.Contains("$addbitncasts"))
+            {
+                for (int i = 1; i < 8; i++)
+                    sb.AppendLine(GetBitNCast(N, i));
+                for (int i = 9; i < 16; i++)
+                    sb.AppendLine(GetBitNCast(N, i));
+                for (int i = 17; i < 32; i++)
+                    sb.AppendLine(GetBitNCast(N, i));
+            }
 
             //Remove everything that follows "//$"
             int cmdStart = newLine.IndexOf("//$");
@@ -86,5 +96,19 @@ public class BitNGenerator : IIncrementalGenerator
         sb.Replace("BitNRef", $"Bit{N}");
 
         return sb.ToString();
+    }
+
+    public static string GetBitNCast(int structN, int castN)
+    {
+        if (structN == castN) return ""; //no need to cast to self
+
+        bool isExplicit = castN < structN;
+        string castModifier = isExplicit ? "explicit" : "implicit";
+
+        string line = $"    public static {castModifier} operator Bit{castN}(Bit{structN} b) => (Bit{castN})b.m_value;";
+        if (isExplicit)
+            line += $"\n    public static explicit operator checked Bit{castN}(Bit{structN} b) => checked((Bit{castN})b.m_value);";
+
+        return line;
     }
 }
