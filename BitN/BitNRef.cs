@@ -108,31 +108,31 @@ internal readonly struct BitNRef ://$makepublic
     // Binary arithmetic operators
     //-------------------------------
     // Note that / and % don't need checked versions because the result is <= its operands.
-    public static BitNRef operator +(BitNRef left, BitNRef right) => (BitNRef)(left.m_value + right.m_value);
-    public static BitNRef operator checked +(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value + right.m_value));
-    public static BitNRef operator -(BitNRef left, BitNRef right) => (BitNRef)(left.m_value - right.m_value);
-    public static BitNRef operator checked -(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value - right.m_value));
+    static BitNRef IAdditionOperators<BitNRef, BitNRef, BitNRef>.operator +(BitNRef left, BitNRef right) => (BitNRef)(left.m_value + right.m_value);
+    static BitNRef IAdditionOperators<BitNRef, BitNRef, BitNRef>.operator checked +(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value + right.m_value));
+    static BitNRef ISubtractionOperators<BitNRef, BitNRef, BitNRef>.operator -(BitNRef left, BitNRef right) => (BitNRef)(left.m_value - right.m_value);
+    static BitNRef ISubtractionOperators<BitNRef, BitNRef, BitNRef>.operator checked -(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value - right.m_value));
 
-    public static BitNRef operator *(BitNRef left, BitNRef right) => (BitNRef)(left.m_value * right.m_value);
-    public static BitNRef operator checked *(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value * right.m_value));
-    public static BitNRef operator /(BitNRef left, BitNRef right) => (BitNRef)(left.m_value / right.m_value);
-    public static BitNRef operator %(BitNRef left, BitNRef right) => (BitNRef)(left.m_value % right.m_value);
+    static BitNRef IMultiplyOperators<BitNRef, BitNRef, BitNRef>.operator *(BitNRef left, BitNRef right) => (BitNRef)(left.m_value * right.m_value);
+    static BitNRef IMultiplyOperators<BitNRef, BitNRef, BitNRef>.operator checked *(BitNRef left, BitNRef right) => checked((BitNRef)(left.m_value * right.m_value));
+    static BitNRef IDivisionOperators<BitNRef, BitNRef, BitNRef>.operator /(BitNRef left, BitNRef right) => (BitNRef)(left.m_value / right.m_value);
+    static BitNRef IModulusOperators<BitNRef, BitNRef, BitNRef>.operator %(BitNRef left, BitNRef right) => (BitNRef)(left.m_value % right.m_value);
 
     //-------------------------------
     // Bitwise/Shift operators
     //-------------------------------
-    public static BitNRef operator ~(BitNRef value) => (BitNRef)(~value.m_value & MaxValueAsBacking);
-    public static BitNRef operator &(BitNRef left, BitNRef right) => (BitNRef)(left.m_value & right.m_value);
-    public static BitNRef operator |(BitNRef left, BitNRef right) => (BitNRef)(left.m_value | right.m_value);
-    public static BitNRef operator ^(BitNRef left, BitNRef right) => (BitNRef)(left.m_value ^ right.m_value);
+    static BitNRef IBitwiseOperators<BitNRef, BitNRef, BitNRef>.operator ~(BitNRef value) => (BitNRef)(~value.m_value & MaxValueAsBacking);
+    static BitNRef IBitwiseOperators<BitNRef, BitNRef, BitNRef>.operator &(BitNRef left, BitNRef right) => (BitNRef)(left.m_value & right.m_value);
+    static BitNRef IBitwiseOperators<BitNRef, BitNRef, BitNRef>.operator |(BitNRef left, BitNRef right) => (BitNRef)(left.m_value | right.m_value);
+    static BitNRef IBitwiseOperators<BitNRef, BitNRef, BitNRef>.operator ^(BitNRef left, BitNRef right) => (BitNRef)(left.m_value ^ right.m_value);
 
-    public static BitNRef operator <<(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value << shiftAmount);
-    public static BitNRef operator >>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >> shiftAmount);
-    public static BitNRef operator >>>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >>> shiftAmount);
+    static BitNRef IShiftOperators<BitNRef, int, BitNRef>.operator <<(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value << shiftAmount);
+    static BitNRef IShiftOperators<BitNRef, int, BitNRef>.operator >>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >> shiftAmount);
+    static BitNRef IShiftOperators<BitNRef, int, BitNRef>.operator >>>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >>> shiftAmount);
 
     //have default impls. but they assume the value takes up all 8 bits per byte.
-    public static BitNRef RotateLeft(BitNRef value, int rotateAmount) => (value << rotateAmount) | (value >> (5 - rotateAmount));//$N
-    public static BitNRef RotateRight(BitNRef value, int rotateAmount) => (value >> rotateAmount) | (value << (5 - rotateAmount));//$N
+    public static BitNRef RotateLeft(BitNRef value, int rotateAmount) => (BitNRef)((value << rotateAmount) | (value >> (5 - rotateAmount)));//$N
+    public static BitNRef RotateRight(BitNRef value, int rotateAmount) => (BitNRef)((value >> rotateAmount) | (value << (5 - rotateAmount)));//$N
 
     //-------------------------------
     // Boolean operators
