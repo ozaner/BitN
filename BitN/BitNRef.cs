@@ -276,9 +276,9 @@ internal readonly struct BitNRef ://$makepublic
     // Span read/write
     //-------------------------------
     bool IBinaryInteger<BitNRef>.TryWriteBigEndian(Span<byte> destination, out int bWritten)
-        => IBitN<BitNRef, byte>.TryWriteBigEndianHelper(m_value, destination, out bWritten);//$type
+        => (m_value as IBinaryInteger<byte>).TryWriteBigEndian(destination, out bWritten);//$type
     bool IBinaryInteger<BitNRef>.TryWriteLittleEndian(Span<byte> destination, out int bWritten)
-        => IBitN<BitNRef, byte>.TryWriteLittleEndianHelper(m_value, destination, out bWritten);//$type
+        => (m_value as IBinaryInteger<byte>).TryWriteLittleEndian(destination, out bWritten);//$type
 
     static bool IBinaryInteger<BitNRef>.TryReadBigEndian(ReadOnlySpan<byte> source, bool isUnsigned, out BitNRef value)
     {

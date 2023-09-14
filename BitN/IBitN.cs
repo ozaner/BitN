@@ -11,12 +11,6 @@ internal interface IBitN<TSelf, TBacking> : INumberBase<TSelf>
     //-------------------------------
     // Span read/write helper methods
     //-------------------------------
-    protected static bool TryWriteBigEndianHelper(TBacking value, Span<byte> destination, out int bytesWritten)
-        => value.TryWriteBigEndian(destination, out bytesWritten);
-
-    protected static bool TryWriteLittleEndianHelper(TBacking value, Span<byte> destination, out int bytesWritten)
-        => value.TryWriteLittleEndian(destination, out bytesWritten);
-
     protected static bool TryReadBigEndianHelper(ReadOnlySpan<byte> source, bool isUnsigned, out TBacking value)
         => TBacking.TryReadBigEndian(source, isUnsigned, out value);
 
