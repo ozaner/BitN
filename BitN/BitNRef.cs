@@ -34,7 +34,7 @@ internal readonly struct BitNRef ://$makepublic
     // Init
     //-------------------------------
     private readonly byte m_value; //stores the actual value as a byte//$type
-    private BitNRef(byte value) => m_value = (byte)(value % (MaxValueAsBacking + 1));//$type
+    private BitNRef(byte value) => m_value = (byte)(value & MaxValueAsBacking);//$type
 
     //-------------------------------
     // object/ValueType
