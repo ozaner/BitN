@@ -23,12 +23,8 @@ namespace BitN;
 //   - Replace all BitNRef w/ "Bit{N}"
 // $endrefcomments
 internal readonly struct BitNRef ://$makepublic
-    IBitHelper<BitNRef, byte>,//$type
-    IConvertible,
-    IEquatable<BitNRef>,
-    IBinaryInteger<BitNRef>,
-    IMinMaxValue<BitNRef>,
-    IUnsignedNumber<BitNRef>
+    IBitN<BitNRef>,
+    IBitHelper<BitNRef, byte>//$type
 {
     //-------------------------------
     // Init
@@ -84,6 +80,7 @@ internal readonly struct BitNRef ://$makepublic
     //-------------------------------
     // Interface constants
     //-------------------------------
+    static int IBitN<BitNRef>.BitCount => 5;//$N
     static int INumberBase<BitNRef>.Radix => 2;
     static BitNRef INumberBase<BitNRef>.One => One;
     static BitNRef INumberBase<BitNRef>.Zero => Zero;
