@@ -3,8 +3,8 @@ using System.Numerics;
 
 namespace BitN;
 
-internal interface IBitN<TSelf, TBacking> : INumberBase<TSelf>
-    where TSelf : IBitN<TSelf, TBacking>
+internal interface IBitHelper<TSelf, TBacking> : INumberBase<TSelf>
+    where TSelf : IBitHelper<TSelf, TBacking>
     where TBacking : struct, IBinaryInteger<TBacking>
 {
 
