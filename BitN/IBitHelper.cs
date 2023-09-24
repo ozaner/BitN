@@ -41,3 +41,20 @@ internal interface IBitHelper<TSelf, TBacking> : INumberBase<TSelf>
     protected static bool TryConvertFromSaturatingHelper<TOther>(TOther value, out TBacking result)
         where TOther : INumberBase<TOther> => TBacking.TryConvertFromSaturating(value, out result);
 }
+
+internal static class BitNUtil
+{
+    //Creates a uint with the first {offset} bits being 0s,
+    //the next {length} bits being 1s, and the rest being 0s.
+    //1111111100000000
+    //{length}{offset}
+    //If {offset} is > 32, offset is % 32.
+    public static uint CreateBitMask(int length, int offset) => ((1u << length) - 1) << offset;
+
+    public static uint SetValueAtOffset(uint backingValue, uint value, int length, int offset)
+    {
+        var mask = ~CreateBitMask(length, offset);//11110001111
+        var newVal = backingValue & mask;//xxxx000xxxx
+        return newVal | (value << offset);//xxxxyyyxxxx
+    }
+}

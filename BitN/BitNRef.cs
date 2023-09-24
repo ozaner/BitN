@@ -1,5 +1,6 @@
 #nullable enable //Auto-generated code must enable this explicitly
 
+using System.Buffers.Binary;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
@@ -23,7 +24,9 @@ namespace BitN;
 //   - Replace all BitNRef w/ "Bit{N}"
 // $endrefcomments
 internal readonly struct BitNRef ://$makepublic
-    IBitN<BitNRef>,
+    IBitNByteSized<BitNRef>,//$1byte
+//  IBitNUInt16Sized<BitNRef>,//$2byte
+//  IBitNUInt32Sized<BitNRef>,//$4byte
     IBitHelper<BitNRef, byte>//$type
 {
     //-------------------------------
@@ -357,4 +360,71 @@ internal readonly struct BitNRef ://$makepublic
     ushort IConvertible.ToUInt16(IFormatProvider? provider) => ((IConvertible)m_value).ToUInt16(provider);
     uint IConvertible.ToUInt32(IFormatProvider? provider) => ((IConvertible)m_value).ToUInt32(provider);
     ulong IConvertible.ToUInt64(IFormatProvider? provider) => ((IConvertible)m_value).ToUInt64(provider);
+
+    //-------------------------------
+    // IBitNByteSized//$1byte
+    // IBitNUInt16Sized//$1or2byte
+    // IBitNUInt32Sized
+    //-------------------------------
+    static BitNRef IBitNByteSized<BitNRef>.ReadByteBacked(ReadOnlySpan<byte> source, int offset)//$1byte
+    {//$1byte
+        var backingVal = source[0];//$1byte
+        var mask = BitNUtil.CreateBitMask(BitCount, offset);//$1byte
+        return (BitNRef)((backingVal & mask) >> offset);//$1byte
+    }//$1byte
+    static BitNRef IBitNUInt16Sized<BitNRef>.ReadUInt16BackedLittleEndian(ReadOnlySpan<byte> source, int offset)//$1or2byte
+    {//$1or2byte
+        var backingVal = BinaryPrimitives.ReadUInt16LittleEndian(source);//$1or2byte
+        var mask = BitNUtil.CreateBitMask(BitCount, offset);//$1or2byte
+        return (BitNRef)((backingVal & mask) >> offset);//$1or2byte
+    }//$1or2byte
+    static BitNRef IBitNUInt16Sized<BitNRef>.ReadUInt16BackedBigEndian(ReadOnlySpan<byte> source, int offset)//$1or2byte
+    {//$1or2byte
+        var backingVal = BinaryPrimitives.ReadUInt16BigEndian(source);//$1or2byte
+        var mask = BitNUtil.CreateBitMask(BitCount, offset);//$1or2byte
+        return (BitNRef)((backingVal & mask) >> offset);//$1or2byte
+    }//$1or2byte
+    static BitNRef IBitNUInt32Sized<BitNRef>.ReadUInt32BackedLittleEndian(ReadOnlySpan<byte> source, int offset)
+    {
+        var backingVal = BinaryPrimitives.ReadUInt32LittleEndian(source);
+        var mask = BitNUtil.CreateBitMask(BitCount, offset);
+        return (BitNRef)((backingVal & mask) >> offset);
+    }
+    static BitNRef IBitNUInt32Sized<BitNRef>.ReadUInt32BackedBigEndian(ReadOnlySpan<byte> source, int offset)
+    {
+        var backingVal = BinaryPrimitives.ReadUInt32BigEndian(source);
+        var mask = BitNUtil.CreateBitMask(BitCount, offset);
+        return (BitNRef)((backingVal & mask) >> offset);
+    }
+
+    void IBitNByteSized<BitNRef>.WriteByteBacked(Span<byte> destination, int offset)//$1byte
+    {//$1byte
+        var backingVal = destination[0];//$1byte
+        var newVal = BitNUtil.SetValueAtOffset(backingVal, this, BitCount, offset);//$1byte
+        destination[0] = (byte)newVal;//$1byte
+    }//$1byte
+    void IBitNUInt16Sized<BitNRef>.WriteUInt16BackedLittleEndian(Span<byte> destination, int offset)//$1or2byte
+    {//$1or2byte
+        var backingVal = BinaryPrimitives.ReadUInt16LittleEndian(destination);//$1or2byte
+        var newVal = BitNUtil.SetValueAtOffset(backingVal, this, BitCount, offset);//$1or2byte
+        BinaryPrimitives.WriteUInt16LittleEndian(destination, (ushort)newVal);//$1or2byte
+    }//$1or2byte
+    void IBitNUInt16Sized<BitNRef>.WriteUInt16BackedBigEndian(Span<byte> destination, int offset)//$1or2byte
+    {//$1or2byte
+        var backingVal = BinaryPrimitives.ReadUInt16BigEndian(destination);//$1or2byte
+        var newVal = BitNUtil.SetValueAtOffset(backingVal, this, BitCount, offset);//$1or2byte
+        BinaryPrimitives.WriteUInt16BigEndian(destination, (ushort)newVal);//$1or2byte
+    }//$1or2byte
+    void IBitNUInt32Sized<BitNRef>.WriteUInt32BackedLittleEndian(Span<byte> destination, int offset)
+    {
+        var backingVal = BinaryPrimitives.ReadUInt32LittleEndian(destination);
+        var newVal = BitNUtil.SetValueAtOffset(backingVal, this, BitCount, offset);
+        BinaryPrimitives.WriteUInt32LittleEndian(destination, newVal);
+    }
+    void IBitNUInt32Sized<BitNRef>.WriteUInt32BackedBigEndian(Span<byte> destination, int offset)
+    {
+        var backingVal = BinaryPrimitives.ReadUInt32BigEndian(destination);
+        var newVal = BitNUtil.SetValueAtOffset(backingVal, this, BitCount, offset);
+        BinaryPrimitives.WriteUInt32BigEndian(destination, newVal);
+    }
 }
