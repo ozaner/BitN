@@ -57,4 +57,17 @@ internal static class BitNUtil
         var newVal = backingValue & mask;//xxxx000xxxx
         return newVal | (value << offset);//xxxxyyyxxxx
     }
+
+    public static bool OutOfBounds(int spanLength, int byteCount, int bitCount, int offset)
+        => spanLength < byteCount || offset + bitCount > byteCount * 8;
+
+    //No need to check span length bc. the read/write impls in BitNRef use 
+    public static void ThrowIfOutOfBounds(int spanLength, int byteCount, int bitCount, int offset)
+    {
+        if (OutOfBounds(spanLength, byteCount, bitCount, offset))
+        {
+            throw new ArgumentOutOfRangeException(nameof(offset),
+                "The number of bits plus the offset must not exceed the number of bits in the backing type.");
+        }
+    }
 }
