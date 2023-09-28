@@ -208,14 +208,14 @@ internal readonly struct BitNRef ://$makepublic
     //-------------------------------
     // Parsing
     //-------------------------------
-    public static BitNRef Parse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider)
+    public static BitNRef Parse(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer, IFormatProvider? provider = null)
         => checked((BitNRef)byte.Parse(s, style, provider));//$type
     public static BitNRef Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, provider));//$type
-    public static BitNRef Parse(string s, NumberStyles style, IFormatProvider? provider)
+        => Parse(s, NumberStyles.Integer, provider);
+    public static BitNRef Parse(string s, NumberStyles style = NumberStyles.Integer, IFormatProvider? provider = null)
         => checked((BitNRef)byte.Parse(s, style, provider));//$type
     public static BitNRef Parse(string s, IFormatProvider? provider)
-        => checked((BitNRef)byte.Parse(s, provider));//$type
+        => Parse(s, NumberStyles.Integer, provider);
     public static bool TryParse(ReadOnlySpan<char> s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
         var success = byte.TryParse(s, style, provider, out var backedResult);//$type
@@ -225,12 +225,7 @@ internal readonly struct BitNRef ://$makepublic
     }
 
     public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
-    {
-        var success = byte.TryParse(s, provider, out var backedResult);//$type
-        success &= backedResult <= MaxValue;
-        result = success ? (BitNRef)backedResult : default;
-        return success;
-    }
+        => TryParse(s, NumberStyles.Integer, provider, out result);
 
     public static bool TryParse([NotNullWhen(true)] string? s, NumberStyles style, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
     {
@@ -241,12 +236,7 @@ internal readonly struct BitNRef ://$makepublic
     }
 
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out BitNRef result)
-    {
-        var success = byte.TryParse(s, provider, out var backedResult);//$type
-        success &= backedResult <= MaxValue;
-        result = success ? (BitNRef)backedResult : default;
-        return success;
-    }
+        => TryParse(s, NumberStyles.Integer, provider, out result);
 
     //-------------------------------
     // IEquatable/IComparable
