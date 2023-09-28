@@ -71,6 +71,7 @@ internal readonly struct BitNRef ://$makepublic
     // Constants
     //-------------------------------
     private const byte MaxValueAsBacking = 31;//$type$max
+    private const int BitCount = 5;//$N
     private static readonly BitNRef One = new(1);
     private static readonly BitNRef Zero = new(0);
 
@@ -80,7 +81,7 @@ internal readonly struct BitNRef ://$makepublic
     //-------------------------------
     // Interface constants
     //-------------------------------
-    static int IBitN<BitNRef>.BitCount => 5;//$N
+    static int IBitN<BitNRef>.BitCount => 5;
     static int INumberBase<BitNRef>.Radix => 2;
     static BitNRef INumberBase<BitNRef>.One => One;
     static BitNRef INumberBase<BitNRef>.Zero => Zero;
@@ -263,11 +264,11 @@ internal readonly struct BitNRef ://$makepublic
     //-------------------------------
     public static BitNRef PopCount(BitNRef value) => (BitNRef)BitOperations.PopCount(value);
     //has a default impl. but it's slow and, crucially, assumes the value takes up all 8 bits per byte.
-    public static BitNRef LeadingZeroCount(BitNRef value) => (BitNRef)(BitOperations.LeadingZeroCount(value) - (32 - 5));//$N
-    public static BitNRef TrailingZeroCount(BitNRef value) => (BitNRef)(BitOperations.TrailingZeroCount(value.m_value << (32 - 5)) - (32 - 5));//$N
+    public static BitNRef LeadingZeroCount(BitNRef value) => (BitNRef)(BitOperations.LeadingZeroCount(value) - (32 - BitCount));
+    public static BitNRef TrailingZeroCount(BitNRef value) => (BitNRef)(BitOperations.TrailingZeroCount(value.m_value << (32 - BitCount)) - (32 - BitCount));
     
     int IBinaryInteger<BitNRef>.GetByteCount() => sizeof(byte);//$type
-    int IBinaryInteger<BitNRef>.GetShortestBitLength() => 5 - LeadingZeroCount(this);//apparently 0 counts as 0 bits//$N
+    int IBinaryInteger<BitNRef>.GetShortestBitLength() => BitCount - LeadingZeroCount(this);//apparently 0 counts as 0 bits
 
     //-------------------------------
     // Span read/write
