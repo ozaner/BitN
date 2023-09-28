@@ -333,9 +333,9 @@ internal readonly struct BitNRef ://$makepublic
     // IFormattable
     //-------------------------------
     // Implementation forwarded from backing type
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    public string ToString([StringSyntax(StringSyntaxAttribute.NumericFormat)] string? format, IFormatProvider? formatProvider = null)
         => m_value.ToString(format, formatProvider);
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+    public bool TryFormat([StringSyntax(StringSyntaxAttribute.NumericFormat)] Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
         => m_value.TryFormat(destination, out charsWritten, format, provider);
 
     //-------------------------------
