@@ -131,9 +131,18 @@ internal readonly struct BitNRef ://$makepublic
     static BitNRef IShiftOperators<BitNRef, int, BitNRef>.operator >>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >> shiftAmount);
     static BitNRef IShiftOperators<BitNRef, int, BitNRef>.operator >>>(BitNRef value, int shiftAmount) => (BitNRef)(value.m_value >>> shiftAmount);
 
-    //have default impls. but they assume the value takes up all 8 bits per byte.
-    public static BitNRef RotateLeft(BitNRef value, int rotateAmount) => (BitNRef)((value << rotateAmount) | (value >> (5 - rotateAmount)));//$N
-    public static BitNRef RotateRight(BitNRef value, int rotateAmount) => (BitNRef)((value >> rotateAmount) | (value << (5 - rotateAmount)));//$N
+    //have default impls. but they assume the value takes up all 8 bits per byte, and so are incorrect.
+    public static BitNRef RotateLeft(BitNRef value, int rotateAmount)
+    {
+        rotateAmount = BitNUtil.Modulo(rotateAmount, BitCount);
+        return (BitNRef)((value << rotateAmount) | (value >> (BitCount - rotateAmount)));
+    }
+
+    public static BitNRef RotateRight(BitNRef value, int rotateAmount)
+    {
+        rotateAmount = BitNUtil.Modulo(rotateAmount, BitCount);
+        return (BitNRef)((value >> rotateAmount) | (value << (BitCount - rotateAmount)));
+    }
 
     //-------------------------------
     // Boolean operators

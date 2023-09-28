@@ -70,4 +70,7 @@ internal static class BitNUtil
                 "The number of bits plus the offset must not exceed the number of bits in the backing type.");
         }
     }
+
+    //The % is a remainder operator, not modulo
+    public static int Modulo(int a, int b) => ((a % b) + b) % b;
 }
