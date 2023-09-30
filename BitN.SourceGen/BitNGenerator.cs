@@ -62,8 +62,6 @@ public class BitNGenerator : IIncrementalGenerator
             if (line.Contains("$type")) newLine = newLine.Replace("byte", $"{type}");
             //$makepublic -> replace all "internal" w/ "public"
             if (line.Contains("$makepublic")) newLine = newLine.Replace("internal", "public");
-            //$max -> replace 31 w/ 2^N-1
-            if (line.Contains("$max")) newLine = newLine.Replace("31", $"{(1UL << N) - 1}");
             //$1byte -> ? do nothing : delete line
             if (line.Contains("$1byte") && byteSize != 1) continue;
             //$1or2byte -> ? do nothing : delete line

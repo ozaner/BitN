@@ -13,7 +13,6 @@ namespace BitN;
 //   - $N -> Replace 5 w/ N
 //   - $type -> replace byte w/ backing type
 //   - $makepublic -> replace all "internal" w/ "public"
-//   - $max -> replace 31 w/ 2^N-1
 //   - $1byte -> ? do nothing : delete line
 //   - $1or2byte -> ? do nothing : delete line
 //   - $2byte -> ? replace first two chars with "  " : delete line
@@ -73,8 +72,8 @@ internal readonly struct BitNRef ://$makepublic
     //-------------------------------
     // Constants
     //-------------------------------
-    private const byte MaxValueAsBacking = 31;//$type$max
     private const int BitCount = 5;//$N
+    private const byte MaxValueAsBacking = (byte)((1UL << BitCount) - 1);//$type
     private static readonly BitNRef One = new(1);
     private static readonly BitNRef Zero = new(0);
 
